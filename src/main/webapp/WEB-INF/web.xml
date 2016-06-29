@@ -17,7 +17,7 @@
 
     <init-param>
       <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-      <param-value>com.azazte.filters.ResponseCorsFilter</param-value>
+      <param-value>com.azazte.filters.Resjava ponseCorsFilter</param-value>
     </init-param>
 
     <load-on-startup>1</load-on-startup>
