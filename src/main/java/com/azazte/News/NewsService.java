@@ -44,7 +44,9 @@ public class NewsService {
         query.limit(limit);
         query.skip(skip);
         query.with(new Sort(Sort.Direction.DESC, ID));
-        Criteria criteria = Criteria.where(IS_APPROVED).is(isApproved);
+        if (isApproved != null) {
+            query.addCriteria(Criteria.where(IS_APPROVED).is(isApproved));
+        }
         return MongoFactory.getMongoTemplate().find(query, NewsCard.class);
     }
 
@@ -53,16 +55,26 @@ public class NewsService {
     }
 
     public List<NewsCard> fetchAllNews(Integer skip, Integer limit) {
+        return fetchNews(skip, limit, null);
+    }
+
+    public List<NewsCard> fetchPendingNews(Integer skip, Integer limit) {
         return fetchNews(skip, limit, false);
     }
 
     public void approveNews(String newsId) {
         NewsCard news = findNewsById(newsId);
+        if (news == null) {
+            return;
+        }
         news.setApproved(true);
         saveNews(news);
     }
 
     private NewsCard findNewsById(String newsId) {
+        if (newsId == null) {
+            return null;
+        }
         Criteria criteria = Criteria.where(ID).is(newsId);
         List<NewsCard> newsCards = MongoFactory.getMongoTemplate().find(new Query(criteria), NewsCard.class);
 
