@@ -2,6 +2,8 @@ package com.azazte.utils;
 
 import com.google.gson.Gson;
 
+import java.util.Date;
+
 /**
  * Created by home on 27/06/16.
  */
@@ -14,5 +16,9 @@ public class AzazteUtils {
 
     public static String toJson(Object obj) {
         return GSON_INSTANCE.toJson(obj);
+    }
+
+    public static long time(){
+        return new Date().getTime();
     }
 }

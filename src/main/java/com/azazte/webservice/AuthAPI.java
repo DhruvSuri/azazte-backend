@@ -9,10 +9,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by home on 30/06/16.
+ * Created by home on 17/07/16.
  */
-@Path("login")
-public class LoginRestAPI {
+
+@Path("auth")
+public class AuthAPI {
     @Path("register")
     @POST
     public Response register(User user) {
@@ -23,7 +24,8 @@ public class LoginRestAPI {
     @POST
     @Path("/")
     public Response login(Credentials credentials) {
-        UserService.getInstance().validateUser(credentials);
-        return null;
+        credentials.validate();
+        String response = UserService.getInstance().validateUser(credentials);
+        return Response.ok(response).build();
     }
 }

@@ -11,6 +11,7 @@ public class NewsCard {
     private String newsSourceUrl;
     private String newsSourceName;
     private String date;
+    private long createdTime;
     private String category;
     private String author;
     private String impact;
@@ -120,5 +121,13 @@ public class NewsCard {
 
     public void setLikes(Integer likes) {
         this.likes = likes;
+    }
+
+    public long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(long createdTime) {
+        this.createdTime = createdTime;
     }
 }

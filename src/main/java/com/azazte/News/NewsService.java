@@ -2,12 +2,14 @@ package com.azazte.News;
 
 import com.azazte.Beans.NewsCard;
 import com.azazte.mongo.MongoFactory;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,7 +32,17 @@ public class NewsService {
         if (newsCard.getLikes() == null) {
             newsCard.setLikes(0);
         }
+        if (newsCard.getId().isEmpty()){
+            newsCard.setId(null);
+        }
+        convertDateToEpoch(newsCard);
         MongoFactory.getMongoTemplate().save(newsCard);
+    }
+
+    private void convertDateToEpoch(NewsCard newsCard) {
+        String date = newsCard.getDate();
+        newsCard.setCreatedTime(new Date(date).getTime());
+        newsCard.setDate("");
     }
 
     private List<NewsCard> fetchNews(Integer skip, Integer limit, Boolean isApproved) {
@@ -62,12 +74,12 @@ public class NewsService {
         return fetchNews(skip, limit, false);
     }
 
-    public void approveNews(String newsId) {
+    public void approveNews(String newsId, Boolean approve) {
         NewsCard news = findNewsById(newsId);
         if (news == null) {
             return;
         }
-        news.setApproved(true);
+        news.setApproved(approve);
         saveNews(news);
     }
 
