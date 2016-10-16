@@ -2,13 +2,17 @@ package com.azazte.News;
 
 import com.azazte.Beans.NewsCard;
 import com.azazte.mongo.MongoFactory;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.azazte.utils.AzazteUtils;
+import com.azazte.utils.Mail.MailConfig;
+import com.azazte.utils.Mail.MailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -32,17 +36,42 @@ public class NewsService {
         if (newsCard.getLikes() == null) {
             newsCard.setLikes(0);
         }
-        if (newsCard.getId().isEmpty()){
+        if (newsCard.getId().isEmpty()) {
             newsCard.setId(null);
         }
-        convertDateToEpoch(newsCard);
+        if (newsCard.getImpactLabel() == null || newsCard.getImpactLabel().isEmpty()) {
+            newsCard.setImpactLabel("IMPACT");
+        }
+        formatDate(newsCard);
+        if (newsCard.getCreatedTimeEpoch() == null){
+            newsCard.setCreatedTimeEpoch(AzazteUtils.time());
+        }
         MongoFactory.getMongoTemplate().save(newsCard);
+        sendMail(newsCard);
     }
 
-    private void convertDateToEpoch(NewsCard newsCard) {
-        String date = newsCard.getDate();
-        newsCard.setCreatedTime(new Date(date).getTime());
-        newsCard.setDate("");
+    private void sendMail(NewsCard newsCard) {
+        try {
+            MailConfig mailConfig = MongoFactory.getMongoTemplate().findOne(new Query(), MailConfig.class);
+            if (mailConfig == null) {
+                return;
+            }
+            MailUtils.sendMail(newsCard.getNewsHead(), newsCard.getNewsBody(), mailConfig.getMailList());
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void formatDate(NewsCard newsCard) {
+
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parse = simpleDateFormat.parse(newsCard.getDate());
+            simpleDateFormat.applyPattern("MMM dd, yyyy");
+            newsCard.setDate(simpleDateFormat.format(parse));
+            newsCard.setCreatedTime(parse.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<NewsCard> fetchNews(Integer skip, Integer limit, Boolean isApproved) {
@@ -59,19 +88,36 @@ public class NewsService {
         if (isApproved != null) {
             query.addCriteria(Criteria.where(IS_APPROVED).is(isApproved));
         }
-        return MongoFactory.getMongoTemplate().find(query, NewsCard.class);
+        List<NewsCard> newsCards = MongoFactory.getMongoTemplate().find(query, NewsCard.class);
+        formatExistingDate(newsCards);
+        return newsCards;
     }
 
-    public List<NewsCard> fetchAllApprovedNews(Integer skip, Integer limit) {
-        return fetchNews(skip, limit, true);
+
+    private void formatExistingDate(List<NewsCard> newsCards) {
+        for (NewsCard newsCard : newsCards) {
+            String dateString = newsCard.getDate();
+            if (dateString.contains("-")) {
+                formatDate(newsCard);
+            }
+        }
     }
 
-    public List<NewsCard> fetchAllNews(Integer skip, Integer limit) {
-        return fetchNews(skip, limit, null);
-    }
+    public List<NewsCard> fetchAllNews(Integer skip, Integer limit, Boolean category, Boolean multipleFlag) {
+        List<NewsCard> newsCards = fetchNews(skip, limit, category);
+        // Supporting the old app for multiple categories
+        for (NewsCard newsCard : newsCards) {
+            String categories = newsCard.getCategory();
+            categories = categories.replaceAll(" ", "");
+            if (!multipleFlag) {
+                String[] split = categories.split(",");
+                newsCard.setCategory(split[0]);
+            } else {
+                newsCard.setCategory(categories);
+            }
+        }
 
-    public List<NewsCard> fetchPendingNews(Integer skip, Integer limit) {
-        return fetchNews(skip, limit, false);
+        return newsCards;
     }
 
     public void approveNews(String newsId, Boolean approve) {

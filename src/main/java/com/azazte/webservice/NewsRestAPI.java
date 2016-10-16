@@ -19,20 +19,23 @@ public class NewsRestAPI {
     Logger logger = LoggerFactory.getLogger(NewsRestAPI.class);
 
     @GET
-    public Response getNews(@QueryParam("start") Integer start, @QueryParam("limit") Integer limit, @QueryParam("filter") String filter) {
+    public Response getNews(@QueryParam("start") Integer start, @QueryParam("limit") Integer limit, @QueryParam("filter") String filter, @QueryParam("multipleFlag") Boolean multipleFlag) {
         List<NewsCard> allNews = null;
-        if (filter == null){
+        if (filter == null) {
             filter = "approved";
+        }
+        if (multipleFlag == null) {
+            multipleFlag = false;
         }
         switch (filter) {
             case "all":
-                allNews = NewsService.getInstance().fetchAllNews(start, limit);
+                allNews = NewsService.getInstance().fetchAllNews(start, limit, null, multipleFlag);
                 break;
             case "pending":
-                allNews = NewsService.getInstance().fetchPendingNews(start, limit);
+                allNews = NewsService.getInstance().fetchAllNews(start, limit, false, multipleFlag);
                 break;
             case "approved":
-                allNews = NewsService.getInstance().fetchAllApprovedNews(start, limit);
+                allNews = NewsService.getInstance().fetchAllNews(start, limit, true, multipleFlag);
                 break;
         }
 
@@ -48,6 +51,6 @@ public class NewsRestAPI {
     @GET
     @Path("fetchNewsOnRefresh3/{count}")
     public Response getNewsForApp(@PathParam("count") Integer count) {
-        return getNews(0, count, "approved");
+        return getNews(0, count, "approved", false);
     }
 }

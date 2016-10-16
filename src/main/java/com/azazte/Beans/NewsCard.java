@@ -1,8 +1,11 @@
 package com.azazte.Beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by home on 27/06/16.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class NewsCard {
     private String id;
     private String imageUrl;
@@ -12,8 +15,10 @@ public class NewsCard {
     private String newsSourceName;
     private String date;
     private long createdTime;
+    private Long createdTimeEpoch;
     private String category;
     private String author;
+    private String impactLabel;
     private String impact;
     private String sentiment;
     private Boolean isApproved;
@@ -129,5 +134,21 @@ public class NewsCard {
 
     public void setCreatedTime(long createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public String getImpactLabel() {
+        return impactLabel;
+    }
+
+    public void setImpactLabel(String impactLabel) {
+        this.impactLabel = impactLabel;
+    }
+
+    public Long getCreatedTimeEpoch() {
+        return createdTimeEpoch;
+    }
+
+    public void setCreatedTimeEpoch(Long createdTimeEpoch) {
+        this.createdTimeEpoch = createdTimeEpoch;
     }
 }

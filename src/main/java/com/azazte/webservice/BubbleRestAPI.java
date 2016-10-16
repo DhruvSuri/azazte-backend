@@ -42,6 +42,13 @@ public class BubbleRestAPI {
         return Response.ok("Bubble saved successfully").build();
     }
 
+    @GET
+    @Path("removeTemp")
+    public Response removeBubbleTemp(@QueryParam("id") String id){
+        BubbleService.getInstance().removeBubble(id);
+        return Response.ok("Bubble Removed").build();
+    }
+
     @POST
     @Path("save")
     public Response saveBubble(Bubble bubble) {
