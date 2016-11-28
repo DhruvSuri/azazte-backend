@@ -23,6 +23,12 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/rest/restricted/404</location>
+    </error-page>
+
+
     <filter>
         <filter-name>AuthFilter</filter-name> <!-- mandatory -->
         <filter-class>com.azazte.filters.AuthFilter</filter-class>

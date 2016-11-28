@@ -1,20 +1,19 @@
 package com.azazte.webservice;
 
+import com.azazte.Beans.NewsCard;
 import com.azazte.Beans.NotificationConfig;
+import com.azazte.Beans.NotificationMessageWrapper;
+import com.azazte.News.NewsService;
 import com.azazte.Notification.NotificationService;
 import com.azazte.utils.AzazteUtils;
-import jersey.repackaged.com.google.common.base.Joiner;
+import com.azazte.utils.TokenService;
 import jersey.repackaged.com.google.common.collect.Lists;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.PrintWriter;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by home on 15/08/16.
@@ -48,15 +47,30 @@ public class NotificationRestAPI {
     }
 
     @GET
-    @Path("/sendNotification")
-    public Response getNotificationCount() {
-        List<NotificationConfig> notificationConfigs = NotificationService.getInstance().getAllNotificationObjects();
-        PrintWriter pw = new PrintWriter(System.out);
-
-        for (NotificationConfig notificationConfig : notificationConfigs) {
-            pw.println(notificationConfig.getRegId());
+    @Path("/send")
+    public Response getNotificationCount(@QueryParam("storyId") String storyId, @QueryParam("sendImage") boolean imageFlag, @QueryParam("customHeadline") String customHeadline, @QueryParam("customImage") String customImage, @QueryParam("test") boolean testFlag, @QueryParam("token") String token) {
+        if (!TokenService.getInstance().validateToken(token)) {
+            return Response.ok("Invalid Token").build();
         }
-        pw.flush();
-        return Response.ok(AzazteUtils.toJson(pw.toString())).build();
+        NewsCard news = NewsService.getInstance().findNewsById(storyId);
+        NotificationMessageWrapper wrapper = new NotificationMessageWrapper();
+
+        if (customHeadline != null) {
+            wrapper.setHeadline(customHeadline);
+        } else {
+            wrapper.setHeadline(news.getNewsHead());
+        }
+
+        if (imageFlag) {
+            if (customImage != null) {
+                wrapper.setImageUrl(customImage);
+            } else {
+                wrapper.setImageUrl(news.getImageUrl());
+            }
+        }
+
+        wrapper.setId(storyId);
+        NotificationService.getInstance().sendNotification(wrapper, testFlag);
+        return Response.ok("Sent successfully").build();
     }
 }

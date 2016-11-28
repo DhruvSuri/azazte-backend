@@ -5,6 +5,7 @@ import com.azazte.Beans.NewsCardWrapper;
 import com.azazte.News.NewsService;
 import com.azazte.mongo.MongoFactory;
 import com.azazte.utils.AzazteUtils;
+import com.azazte.utils.TokenService;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -25,11 +26,22 @@ import java.util.List;
 @Path("restricted")
 public class Restricted {
 
+    @GET
+    @Path("404")
+    public Response error() {
+        return Response.ok("404").build();
+    }
 
     @GET
     @Path("testGET")
     public Response test() {
         return Response.ok("Yes the server is up").build();
+    }
+
+    @GET
+    @Path("token")
+    public Response getToken() {
+        return Response.ok(TokenService.getInstance().getToken()).build();
     }
 
     @POST

@@ -43,9 +43,6 @@ public class NewsService {
             newsCard.setImpactLabel("IMPACT");
         }
         formatDate(newsCard);
-        if (newsCard.getCreatedTimeEpoch() == null){
-            newsCard.setCreatedTimeEpoch(AzazteUtils.time());
-        }
         MongoFactory.getMongoTemplate().save(newsCard);
         sendMail(newsCard);
     }
@@ -125,11 +122,14 @@ public class NewsService {
         if (news == null) {
             return;
         }
+        if (news.getCreatedTimeEpoch() == null){
+            news.setCreatedTimeEpoch(AzazteUtils.time());
+        }
         news.setApproved(approve);
         saveNews(news);
     }
 
-    private NewsCard findNewsById(String newsId) {
+    public NewsCard findNewsById(String newsId) {
         if (newsId == null) {
             return null;
         }

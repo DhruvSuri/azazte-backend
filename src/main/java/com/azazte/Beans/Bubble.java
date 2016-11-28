@@ -1,27 +1,18 @@
 package com.azazte.Beans;
 
+import java.util.List;
+
 /**
  * Created by home on 13/08/16.
  */
 public class Bubble {
     private String id;
     private String storyId;
-    private String question;
-    private String answer;
+    private String answer;  // This is channelDataListString.Due to some historic reasons it is named as answer
+    private List<ChannelData> channelDataList;
     private long createdTime;
 
-    public Bubble(String id, String question, String answer) {
-        this.storyId = id;
-        this.question = question;
-        this.answer = answer;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
+    public Bubble() {
     }
 
     public String getAnswer() {
@@ -54,5 +45,13 @@ public class Bubble {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<ChannelData> getChannelDataList() {
+        return channelDataList;
+    }
+
+    public void setChannelDataList(List<ChannelData> channelDataList) {
+        this.channelDataList = channelDataList;
     }
 }
