@@ -1,0 +1,59 @@
+Multiply two numbers represented as a linked list.
+
+Design question- Design a enhanced search that can help customer executives to search for the query asked by user through all the possible sections like- payment, order etc.
+
+Design a job scheduler.
+
+Palindrome Partitioning– Spilt a string into minimum number of substring such that each substring is a pallindrome.
+
+
+The Maximum Subarray problem
+
+kth smallest element in row wise and column wise sorted matrix : Heap | sorted arrays
+ 
+ Suppose there is a social networking site like Facebook. Every user gets some friend recommendations (i.e. People you may know!). Now, if there is a user A and he has 100 friends and each of his friends has got 5 other friends,A can get these 500 recommendations. But the condition is that he should only get the top 10 recommendations with whom he has the maximum number of mutual friends(If A and B are friends and B and C are friends, then A and C have a mutual friend, B). Suggest an efficient data structure for this and how to implement it. The implementation should be flexible as at any moment, any user can make new friends and he may also unfriend someone!
+ 
+ Design parking system
+ 
+ 
+ a) Difference between process and thread.
+b) Advantages and disadvantages of using threads.
+c) Difference b/w Scheduler and Dispatcher.
+d) Name all the process scheduling algos and explain the Round Robin Process Scheduling.
+e) At max how many threads can be active at a time in a machine?
+f) What is race condition and how do we avoid it?
+g) Difference between Semaphores and Mutex?
+h) What is secondary memory and why do we use it?
+i) What is thrashing?
+
+
+http://www.geeksforgeeks.org/find-a-number-in-minimum-steps/
+
+You have to replace every element of an array with its immediate smaller element to the right. If such an element doesn’t exist don’t replace it.
+
+Coding Question- Given an array, find min element in the range (xi,yi) . Queries can be very large.
+First i gave brute force approach (0(n) for each query ) and after that I gave a segment Tree solution to him. He told me to prove time and space complexity.
+
+
+http://www.geeksforgeeks.org/amazon-interview-experience-set-284-on-campus/
+
+Given a number k , Find no. of ways to make this number using sum of numbers from 1 to k-1
+
+http://www.geeksforgeeks.org/check-if-a-given-array-can-represent-preorder-traversal-of-binary-search-tree/
+
+
+
+Your current Group/Team structure.
+Promotion criteria in your group.
+Situation when you helped your colleague
+Situation when you needed help from a colleague.
+If one of team member is not working or working very slow, how will you handle the situation.
+When you have trained any colleague.
+Technology suggested by you in your team.
+
+http://www.geeksforgeeks.org/amazon-interview-experience-set-264-experienced-for-sde1/
+
+ Extraordinary work done in company which was out of scope of your designation.
+ 
+ 
+ http://www.geeksforgeeks.org/amazon-interview-experience-set-260-for-sde2/
