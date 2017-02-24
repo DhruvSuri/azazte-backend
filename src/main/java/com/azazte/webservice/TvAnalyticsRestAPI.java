@@ -65,16 +65,14 @@ public class TvAnalyticsRestAPI {
 
     @GET
     @Path("printVideoQueue")
-    public void printVideoQueue() {
-        System.out.println("Size of video Queue is : " + CentralQueue.videoQ.size());
-        System.out.println("Values of video Queue is : " + CentralQueue.videoQ);
+    public Response printVideoQueue() {
+        return Response.ok("Size of video Queue is : + CentralQueue.videoQ.size()" + "  and Values of video Queue is : " + CentralQueue.videoQ).build();
     }
 
     @GET
     @Path("printImageQueue")
-    public void printImageQueue() {
-        System.out.println("Size of video Queue is : " + CentralQueue.imageQ.size());
-        System.out.println("Values of video Queue is : " + CentralQueue.imageQ);
+    public Response printImageQueue() {
+        return Response.ok("Size of video Queue is :" + CentralQueue.imageQ.size() + "  and Values of image Queue is : " + CentralQueue.imageQ).build();
     }
 
     @GET
