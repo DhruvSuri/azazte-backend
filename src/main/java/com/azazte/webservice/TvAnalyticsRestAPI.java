@@ -66,7 +66,7 @@ public class TvAnalyticsRestAPI {
     @GET
     @Path("printVideoQueue")
     public Response printVideoQueue() {
-        return Response.ok("Size of video Queue is : + CentralQueue.videoQ.size()" + "  and Values of video Queue is : " + CentralQueue.videoQ).build();
+        return Response.ok("Size of video Queue is :" + CentralQueue.videoQ.size() + "  and Values of video Queue is : " + CentralQueue.videoQ).build();
     }
 
     @GET

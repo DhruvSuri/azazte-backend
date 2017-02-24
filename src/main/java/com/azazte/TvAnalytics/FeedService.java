@@ -120,7 +120,7 @@ public class FeedService {
             HttpGet getRequest = new HttpGet(url);
             HttpResponse response = httpClient.execute(getRequest);
             if (response.getStatusLine().getStatusCode() != 200) {
-                System.out.println("Chunklist get call broken.no 200");
+                System.out.println("Chunklist get call broken" + response.getStatusLine().getReasonPhrase());
                 return null;
             }
             return parseFileResponse(response.getEntity().getContent());
