@@ -225,6 +225,9 @@ public class GovService {
             LowestLevelResponse lowestLevelResponse;
             if (cweVsGeList.containsKey(unitResource.getCwe())) {
                 lowestLevelResponse = cweVsGeList.get(unitResource.getCwe());
+                if (unitResource.getGe().contains("GE")) {
+                    unitResource.getVehicleResource().setSCAR(1);
+                }
                 lowestLevelResponse.getGeVsVehicleResource().put(unitResource.getGe(), unitResource.getVehicleResource());
             } else {
                 lowestLevelResponse = new LowestLevelResponse();
@@ -353,13 +356,13 @@ public class GovService {
         if (getOfficerStrength(zoneName) > 50) {
             baseVehicleResource.setSCAR(baseVehicleResource.getSCAR() + 3);
         } else {
-            baseVehicleResource.setSCAR(baseVehicleResource.getSCAR() + 2);
+            baseVehicleResource.setSCAR(baseVehicleResource.getSCAR() + 3);
         }
 
-        baseVehicleResource.setOMNI(baseVehicleResource.getOMNI() + 2);
-        baseVehicleResource.setGYPSY(baseVehicleResource.getGYPSY() + 1);
-        baseVehicleResource.setMC(baseVehicleResource.getMC() + 2);
-        baseVehicleResource.setLDV(baseVehicleResource.getLDV() + 1); // yet to get clarification on exception (b)
+        baseVehicleResource.setOMNI(baseVehicleResource.getOMNI() + 2 + 1);
+        baseVehicleResource.setGYPSY(baseVehicleResource.getGYPSY() + 1 + 1);
+        baseVehicleResource.setMC(baseVehicleResource.getMC() + 2 + 1);
+        baseVehicleResource.setLDV(baseVehicleResource.getLDV() + 1 ); // yet to get clarification on exception (b)
         baseVehicleResource.setLCV(baseVehicleResource.getLCV() + 1);
     }
 
