@@ -12,7 +12,7 @@ import java.util.Map;
  * Created by dhruv.suri on 20/02/17.
  */
 public class CBIRService {
-    private static Map<String, String> map;
+    public static Map<String, String> map;
     private static CBIRService instance = new CBIRService();
 
     public static CBIRService getInstance() {
@@ -26,6 +26,11 @@ public class CBIRService {
 
         Map<String, Integer> bucketMap = new HashMap<>();
         List<SimilarityResponse> responses = CBIRAPIExecutor.getInstance().searchImage(url);
+
+        if (responses.get(0).getSimilarities().endsWith("6") || responses.get(0).getSimilarities().endsWith("7")){
+            return null;
+        }
+
         responses = responses.subList(0, 10);
         for (SimilarityResponse response : responses) {
             String bucket = map.get(response.getId() + ".png");
@@ -54,7 +59,6 @@ public class CBIRService {
     public void refreshMap() {
         try {
             map = new HashMap<>();
-            System.out.println("Size of map is now " + map.size());
             FileInputStream fis = new FileInputStream(DefaultPaths.mapPath);
             ObjectInputStream ois = new ObjectInputStream(fis);
             map = (HashMap) ois.readObject();

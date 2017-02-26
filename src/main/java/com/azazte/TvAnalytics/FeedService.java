@@ -2,6 +2,7 @@ package com.azazte.TvAnalytics;
 
 import com.azazte.TvAnalytics.CBIR.CBIRService;
 import com.azazte.webservice.TvAnalyticsRestAPI;
+import com.ibm.watson.developer_cloud.alchemy.v1.model.Feed;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -9,6 +10,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHttpResponse;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -41,7 +43,7 @@ public class FeedService {
                 for (String url : videoListFromChunkList) {
                     int indexOf = url.indexOf(".ts");
                     alreadyFetchedVideos.add(url.substring(0, indexOf));
-                    if (alreadyFetchedVideos.size() % 20 == 0) {
+                    if (alreadyFetchedVideos.size() % 10 == 0) {
                         videoStream.close();
                         CentralQueue.videoQ.add(videoUrl);
                         videoUrl = DefaultPaths.defaultFeedPath + new Date() + ".ts";
@@ -86,14 +88,15 @@ public class FeedService {
 
         try {
             while (true) {
+                //Ad break condition
                 if (CentralQueue.videoQ.size() == 0) {
-                    System.out.println("Waiting for video in video feed");
+                    //System.out.println("Waiting for video in video feed");
                     Thread.sleep(2000);
                     continue;
                 }
                 VideoToImageConvertor.getInstance().convert(CentralQueue.videoQ.remove(), DefaultPaths.defaultImagePath, DefaultPaths.frameRate, CentralQueue.imageQ);
             }
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -102,11 +105,15 @@ public class FeedService {
         try {
             while (true) {
                 if (CentralQueue.imageQ.size() == 0) {
-                    System.out.println("Waiting for video in video feed");
+                    //System.out.println("Waiting for video in video feed");
                     Thread.sleep(2000);
                 }
-                String bucketName = CBIRService.getInstance().identifyBucket("file://" + CentralQueue.imageQ.remove());
-                System.out.println(bucketName + " at time : " + new Date().getTime());
+                String path = "file://" + Paths.get(CentralQueue.imageQ.remove()).toAbsolutePath().toString();
+                String bucketName = CBIRService.getInstance().identifyBucket(path);
+                if (bucketName == null) {
+                    continue;
+                }
+                System.out.println(bucketName + " at time : " + new Date() + " and image url is " + path); // TODO :  add image name as well
             }
         } catch (Exception ignored) {
 

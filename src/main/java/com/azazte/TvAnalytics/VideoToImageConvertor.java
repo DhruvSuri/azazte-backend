@@ -42,7 +42,7 @@ public class VideoToImageConvertor {
         SECONDS_BETWEEN_FRAMES = secondsBetweenFrames;
         MICRO_SECONDS_BETWEEN_FRAMES = (long) (Global.DEFAULT_PTS_PER_SECOND * SECONDS_BETWEEN_FRAMES);
         QUEUE = optionalImageQueue;
-        IMAGE_COUNTER = 1;
+        //IMAGE_COUNTER = 1;
         IMediaReader mediaReader = ToolFactory.makeReader(inputPath);
 
         // stipulate that we want BufferedImages created in BGR 24bit color space
@@ -83,9 +83,9 @@ public class VideoToImageConvertor {
                 // indicate file written
                 double seconds = ((double) event.getTimeStamp()) /
                         Global.DEFAULT_PTS_PER_SECOND;
-                System.out.printf(
-                        "at elapsed time of %6.3f seconds wrote: %s\n",
-                        seconds, outputFilename);
+                //System.out.printf(
+                //        "at elapsed time of %6.3f seconds wrote: %s\n",
+                //        seconds, outputFilename);
 
                 // update last write time
                 mLastPtsWrite += MICRO_SECONDS_BETWEEN_FRAMES;
@@ -96,7 +96,7 @@ public class VideoToImageConvertor {
         private String dumpImageToFile(BufferedImage image) {
             try {
                 String outputFilename = OUTPUT_PATH +
-                        IMAGE_COUNTER + ".png";
+                        new Date().getTime() + ".png";
                 ImageIO.write(image, "png", new File(outputFilename));
                 IMAGE_COUNTER++;
                 if (QUEUE != null) {
@@ -111,10 +111,5 @@ public class VideoToImageConvertor {
         }
 
     }
-
-
-    public static void main(String args[]) {
-        VideoToImageConvertor.getInstance().convert("/Users/dhruv.suri/Documents/project/azazte-backend/Videos/Ad Videos/Wild Stone Perfume New Ad.mp4", "/Users/dhruv.suri/Documents/project/azazte-backend/Videos/Ads/Wild_Stone/", 0.15, null);
-    }
-
+    
 }

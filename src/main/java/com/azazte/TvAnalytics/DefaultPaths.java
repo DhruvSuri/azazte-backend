@@ -11,6 +11,6 @@ public class DefaultPaths {
     //public static String defaultImagePath = "/Users/dhruv.suri/Documents/project/azazte-backend/Videos/image/";
     public static String defaultImagePath = "base/image/";
     public static int DefaultCBIRResponseSize = 30;
-    public static int BucketThreshold = 10;
+    public static int BucketThreshold = 7;
     public static double frameRate = 0.2;
 }
